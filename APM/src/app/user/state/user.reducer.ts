@@ -14,7 +14,7 @@ const initialState: UserState = {
 
 const getUserFeatureState = createFeatureSelector<UserState>('users');
 
-export const getMastUserName = createSelector(getUserFeatureState, state => state.maskUserName);
+export const getMaskUserName = createSelector(getUserFeatureState, state => state.maskUserName);
 export const getCurrentUser = createSelector(getUserFeatureState, state => state.currentUser);
 
 export const userReducer = createReducer<UserState>(
