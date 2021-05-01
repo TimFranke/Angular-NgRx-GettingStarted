@@ -98,6 +98,6 @@ export const productReducer = createReducer<ProductState>(
       ...state,
       products: [],
       error: action.error
-    }
+    };
   })
 );
