@@ -40,7 +40,7 @@ export const updateProduct = createAction(
 );
 export const updateProductsSuccess = createAction(
   '[Product] Update Product Success',
-  props<{ products: Product }>()
+  props<{ product: Product }>()
 );
 
 export const updateProductsFailure = createAction(
