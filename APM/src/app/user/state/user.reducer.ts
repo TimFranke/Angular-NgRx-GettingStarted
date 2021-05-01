@@ -1,11 +1,19 @@
-import { createAction, createReducer, on } from "@ngrx/store";
+import { createAction, createFeatureSelector, createReducer, createSelector, on } from "@ngrx/store";
 
 export interface UserState {
-    mastUserName: boolean;
+    maskUserName: boolean;
 }
 
+const initialState: UserState = {
+    maskUserName: true
+}
+
+const getUserFeatureState = createFeatureSelector<UserState>('users');
+
+export const getMastUserName = createSelector(getUserFeatureState, state => state.maskUserName);
+
 export const userReducer = createReducer(
-    { maskUserName: false },
+    initialState,
     on(createAction('[User] Toggle Mask User Name'), state => {
         // console.log('original state: ' + JSON.stringify(state));
         return {
