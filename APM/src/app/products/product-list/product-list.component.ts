@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 
 import { Product } from '../product';
 
@@ -6,7 +7,6 @@ import { Product } from '../product';
 import { Store } from '@ngrx/store';
 import { State, getShowProductCode, getCurrentProduct, getProducts, getError } from '../state/product.reducer';
 import * as ProductActions from '../state/product.actions';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'pm-product-list',
@@ -15,23 +15,30 @@ import { Observable } from 'rxjs';
 })
 export class ProductListComponent implements OnInit {
   pageTitle = 'Products';
-
-  products$: Observable<Product[]>;
-  selectedProduct$: Observable<Product>;
   displayCode$: Observable<boolean>;
   errorMessage$: Observable<string>;
+
+  products$: Observable<Product[]>;
+  // Used to highlight the selected product in the list
+  selectedProduct$: Observable<Product>;
 
   constructor(private store: Store<State>) { }
 
   ngOnInit(): void {
-    this.selectedProduct$ = this.store.select(getCurrentProduct);
 
+    // Do NOT subscribe here because it uses an async pipe
+    // This gets the initial values until the load is complete.
     this.products$ = this.store.select(getProducts);
 
-    this.errorMessage$ =  this.store.select(getError);
+    // Do NOT subscribe here because it uses an async pipe
+    this.errorMessage$ = this.store.select(getError);
 
     this.store.dispatch(ProductActions.loadProducts());
 
+    // Do NOT subscribe here because it uses an async pipe
+    this.selectedProduct$ = this.store.select(getCurrentProduct);
+
+    // Do NOT subscribe here because it uses an async pipe
     this.displayCode$ = this.store.select(getShowProductCode);
   }
 
