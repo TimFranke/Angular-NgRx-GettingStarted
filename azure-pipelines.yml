@@ -1,0 +1,27 @@
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: AzureKeyVault@1
+  inputs:
+    azureSubscription: 'keyvault-sp'                    ## YOUR_SERVICE_CONNECTION_NAME
+    KeyVaultName: 'keyvault-timap'                         ## YOUR_KEY_VAULT_NAME
+    SecretsFilter: 'sqldbpassword'                          ## YOUR_SECRET_NAME
+    RunAsPreJob: false
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: '**/*.csproj'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'run'
+    projects: '**/*.csproj'
+  env:
+    mySecret: $(sqldbpassword)
+
+- bash: |
+    echo "Secret Found! $MY_MAPPED_ENV_VAR"        
+  env:
+    MY_MAPPED_ENV_VAR: $(mySecret)
